@@ -1,3 +1,5 @@
+# getting and setting in a hash table is o(1) constant time.
+
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -20,11 +22,17 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity):
+    def __init__(self, capacity,hash):
         # Your code here
+        self.capacity = MIN_CAPACITY
+        # internal flat array, initialize element to none
+        self.buckets = [None] * self.capacity
+        self.hash = self.hash
+        
+        
 
 
-    def get_num_slots(self):
+    def get_num_slots(self, key):
         """
         Return the length of the list you're using to hold the hash
         table data. (Not the number of items stored in the hash table,
@@ -35,7 +43,11 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        length = len(self.buckets)
+        return hash(key) % length
 
+
+# Load factor = number of items / table size
 
     def get_load_factor(self):
         """
@@ -44,6 +56,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.capacity
 
 
     def fnv1(self, key):
@@ -64,6 +77,14 @@ class HashTable:
         """
         # Your code here
 
+        hash = 5381
+        for k in key:
+            hash = (hash * 32) + ord(k)
+            return hash
+
+
+
+
 
     def hash_index(self, key):
         """
@@ -82,6 +103,21 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        llist = self.value[self.hash(key)]
+        if llist == None:
+            node = value(key, value = value)
+            llist = LinkedList(head=node)
+            self.links[self.hash(key)] = llist
+            return
+        current_node = llist.head
+        while current_node != None:
+            if current_node.key == key:
+                current_node.value = value
+                return
+            else:
+                current_node = current_node.next
+        llist.push(value(key = key, value = value))            
+
 
 
     def delete(self, key):
@@ -104,6 +140,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        key = self.buckets[self.hash(key)]
 
 
     def resize(self, new_capacity):
